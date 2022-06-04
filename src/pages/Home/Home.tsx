@@ -1,8 +1,7 @@
 // Hooks
 import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
 // Context
-import { AuthContext } from '../../App'
+import { useAuth } from '../../hooks/useAuth'
 // Images
 import illustrationImg from '../../assets/illustration.svg'
 import logoImg from '../../assets/logo.svg'
@@ -16,9 +15,8 @@ export function Home() {
   /* Função de Navegação */
   const navigate = useNavigate()
   /* Contexto */
-  const { user, signInWithGoogle } = useContext(AuthContext)
-  /* Autenticação */
-
+  const { user, signInWithGoogle } = useAuth()
+  // Navigation / Google
   async function handleCreateRoom() {
     if (!user) {
       await signInWithGoogle()
@@ -28,7 +26,6 @@ export function Home() {
   /* Tela do Home */
   return (
     <div id="page-auth">
-      {/* Conteúdo Roxo */}
       <aside>
         <img
           src={illustrationImg}
