@@ -1,7 +1,8 @@
 // Hooks
 import { useNavigate } from 'react-router-dom'
-//Autenticação Google
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { useContext } from 'react'
+// Context
+import { AuthContext } from '../../App'
 // Images
 import illustrationImg from '../../assets/illustration.svg'
 import logoImg from '../../assets/logo.svg'
@@ -10,30 +11,19 @@ import googleIconImg from '../../assets/google-icon.svg'
 import { Button } from '../../components/Button/Button'
 // Sass
 import './auth.scss'
-import { app } from '../../services/firebase'
-import { firebaseConfig } from '../../services/firebase'
 
 export function Home() {
   /* Função de Navegação */
   const navigate = useNavigate()
-  /*  */
-  const provider = new GoogleAuthProvider()
-  const auth = getAuth(app)
-  function handleCreateRoom() {
-    signInWithPopup(auth, provider)
-      .then(result => {
-        console.log(result)
-      })
-      .catch(error => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const email = error.email
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error)
-      })
+  /* Contexto */
+  const { user, signInWithGoogle } = useContext(AuthContext)
+  /* Autenticação */
 
-    // navigate('/rooms/new')
+  async function handleCreateRoom() {
+    if (!user) {
+      await signInWithGoogle()
+    }
+    navigate('/rooms/new')
   }
   /* Tela do Home */
   return (

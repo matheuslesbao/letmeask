@@ -1,14 +1,19 @@
 // Hooks
 import { Link } from 'react-router-dom'
-
+import { useContext } from 'react'
+// Context
+import { AuthContext } from '../../App'
+// Images
 import illustrationImg from '../../assets/illustration.svg'
 import logoImg from '../../assets/logo.svg'
-
+// Components
 import { Button } from '../../components/Button/Button'
-
+// Sass
 import './newRoom.scss'
 
 export function NewRoom() {
+  const { user } = useContext(AuthContext)
+
   return (
     <div id="page-auth">
       <aside>
@@ -22,6 +27,7 @@ export function NewRoom() {
       <main>
         <div className="main-content">
           <img src={logoImg} alt="Logo do letmeask" />
+          <h1>{user?.name}</h1>
           <h2>Criar uma nova Sala</h2>
           <div className="separator"> ou entre em uma sala</div>
           <form action="">
