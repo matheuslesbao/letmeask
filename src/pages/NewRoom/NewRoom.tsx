@@ -1,7 +1,6 @@
 // Hooks
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FormEvent, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 // Context
 import { useAuth } from '../../hooks/useAuth'
 // Images
@@ -12,7 +11,6 @@ import { Button } from '../../components/Button/Button'
 // Sass
 import './newRoom.scss'
 //database
-import { ref, push, set, child } from 'firebase/database'
 import { database } from '../../services/firebase'
 
 export function NewRoom() {
@@ -26,13 +24,9 @@ export function NewRoom() {
     if (newRoom.trim() === '') {
       return
     }
+    const roomRef = database.ref('rooms')
 
-    const roomRef = ref(database, 'rooms')
-
-    //const firebaseRoom = await push(child(ref(database), 'rooms'))
-
-    const firebaseRoom = await push(roomRef)
-    set(ref(database, `rooms/${firebaseRoom.key}`), {
+    const firebaseRoom = await roomRef.push({
       title: newRoom,
       authorId: user?.id
     })

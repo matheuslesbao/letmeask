@@ -11,7 +11,7 @@ import googleIconImg from '../../assets/google-icon.svg'
 import { Button } from '../../components/Button/Button'
 // Sass
 import './auth.scss'
-import { ref, get, child, set } from 'firebase/database'
+//import { ref, get, child, set } from 'firebase/database'
 import { database } from '../../services/firebase'
 
 export function Home() {
@@ -30,20 +30,24 @@ export function Home() {
     navigate('/rooms/new')
   }
   // Entrar na sala existente ou nao
-  function handleJoinRoom(event: FormEvent) {
+  async function handleJoinRoom(event: FormEvent) {
     event.preventDefault()
 
     if (roomCode.trim() === '') {
       return
     }
-
-    const roomRef = ref(database, 'rooms')
-    get(child(roomRef, `/rooms/${roomRef}`)).then(roomRef => {
-      if (!roomRef.exists()) {
-        console.log(roomCode)
-        alert('Room does not exists.')
-      }
-    })
+    const roomRef = await database.ref(`rooms/${roomCode}`).get()
+    /* const roomRef = ref(database, 'room')
+    get(child(roomRef, `/rooms/${roomCode}`)).then(roomRef => {
+    }) */
+    if (!roomRef.exists()) {
+      alert('Room does not exists.')
+      return
+    }
+    if (roomRef.val().endedAt) {
+      alert('Room already closed')
+      return
+    }
 
     navigate(`/rooms/${roomCode}`)
   }
